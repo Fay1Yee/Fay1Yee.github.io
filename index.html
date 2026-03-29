@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zephyrus Zhou | Portfolio</title>
+  <meta
+    name="description"
+    content="A GitHub Pages-ready personal portfolio starter with an editorial visual system and simple inline customization."
+  >
+  <meta name="theme-color" content="#f4ecdd">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191917'/%3E%3Cpath d='M18 18h28v6H28v10h14v6H28v10h18v6H18z' fill='%23f4ecdd'/%3E%3C/svg%3E"
+  >
+  <style>
+    :root {
+      --paper: #f4ecdd;
+      --paper-strong: #fbf7ef;
+      --ink: #181716;
+      --muted: rgba(24, 23, 22, 0.72);
+      --soft: rgba(24, 23, 22, 0.48);
+      --line: rgba(24, 23, 22, 0.12);
+      --line-strong: rgba(24, 23, 22, 0.2);
+      --accent: #9e4f2d;
+      --accent-deep: #7d3517;
+      --accent-cool: #224d6b;
+      --shadow: 0 24px 80px rgba(56, 39, 26, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --shell: min(1180px, calc(100vw - 32px));
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 14%, rgba(34, 77, 107, 0.12), transparent 24%),
+        radial-gradient(circle at 78% 18%, rgba(158, 79, 45, 0.14), transparent 28%),
+        linear-gradient(180deg, rgba(251, 247, 239, 0.98), rgba(244, 236, 221, 0.98));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(24, 23, 22, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 23, 22, 0.05) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.28;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 18px;
+      border: 1px solid rgba(24, 23, 22, 0.08);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .page-noise,
+    .page-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-noise {
+      background-image:
+        radial-gradient(circle, rgba(24, 23, 22, 0.06) 0.8px, transparent 0.8px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.44) 0.8px, transparent 0.8px);
+      background-size: 18px 18px;
+      background-position: 0 0, 9px 9px;
+      opacity: 0.18;
+      mix-blend-mode: multiply;
+    }
+
+    .page-glow {
+      background:
+        radial-gradient(circle at 12% 22%, rgba(255, 255, 255, 0.88), transparent 26%),
+        radial-gradient(circle at 86% 16%, rgba(255, 244, 231, 0.76), transparent 22%),
+        radial-gradient(circle at 68% 78%, rgba(221, 233, 244, 0.4), transparent 24%);
+      filter: blur(16px);
+      opacity: 0.8;
+    }
+
+    .masthead {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 18px 0 0;
+    }
+
+    .nav-shell {
+      width: var(--shell);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 18px;
+      border: 1px solid rgba(24, 23, 22, 0.1);
+      border-radius: 999px;
+      background: rgba(251, 247, 239, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 14px 40px rgba(44, 32, 24, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 14px;
+      height: 14px;
+      flex: none;
+      border-radius: 4px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-cool));
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.42);
+      transform: rotate(12deg);
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-copy p {
+      margin: 0;
+    }
+
+    .brand-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--soft);
+    }
+
+    .brand-name {
+      font-size: 0.94rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: rgba(255, 255, 255, 0.56);
+      color: var(--ink);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .site-shell {
+      position: relative;
+      width: var(--shell);
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: center;
+      min-height: calc(100vh - 96px);
+      padding: clamp(54px, 8vw, 88px) 0 clamp(40px, 7vw, 72px);
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 18px;
+      font-size: 0.74rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .display {
+      margin: 0;
+      font-family: "Bodoni Moda", Georgia, serif;
+      font-size: clamp(3.8rem, 9vw, 7.2rem);
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      text-wrap: balance;
+      max-width: 9ch;
+    }
+
+    .hero-role {
+      margin: 24px 0 0;
+      padding-left: 18px;
+      border-left: 2px solid var(--accent);
+      font-size: clamp(1rem, 2vw, 1.24rem);
+      color: var(--muted);
+      max-width: 36rem;
+    }
+
+    .lede,
+    .section-head p,
+    .about-card p,
+    .practice-card p,
+    .project-summary,
+    .project-impact,
+    .timeline-copy,
+    .contact-note {
+      font-size: 1rem;
+      line-height: 1.72;
+      color: var(--muted);
+    }
+
+    .lede {
+      margin: 24px 0 0;
+      max-width: 39rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(49, 36, 27, 0.1);
+      outline: none;
+    }
+
+    .button-primary {
+      background: var(--ink);
+      color: var(--paper-strong);
+    }
+
+    .button-secondary {
+      border-color: rgba(24, 23, 22, 0.16);
+      background: rgba(255, 255, 255, 0.52);
+      color: var(--ink);
+    }
+
+    .button-tertiary {
+      border-color: rgba(24, 23, 22, 0.14);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      list-style: none;
+      padding: 24px 0 0;
+      margin: 34px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .stat-card {
+      padding: 14px 0 0;
+      border-top: 2px solid rgba(24, 23, 22, 0.14);
+    }
+
+    .stat-value {
+      display: block;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.06em;
+    }
+
+    .stat-label {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: var(--soft);
+    }
+
+    .hero-frame {
+      position: relative;
+      min-height: 38rem;
+      padding: clamp(22px, 4vw, 34px);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line-strong);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.14)),
+        linear-gradient(135deg, rgba(158, 79, 45, 0.08), rgba(34, 77, 107, 0.14));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .hero-frame::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 28px;
+      border: 1px dashed rgba(24, 23, 22, 0.16);
+      pointer-events: none;
+    }
+
+    .hero-frame::after {
+      content: "";
+      position: absolute;
+      width: 15rem;
+      height: 15rem;
+      right: -4rem;
+      bottom: -5rem;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 36% 36%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.24) 42%, transparent 72%);
+      border: 1px solid rgba(24, 23, 22, 0.08);
+      opacity: 0.9;
+      filter: blur(1px);
+    }
+
+    .frame-card {
+      position: relative;
+      z-index: 1;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(24, 23, 22, 0.12);
+      background: rgba(251, 247, 239, 0.88);
+      box-shadow: 0 18px 42px rgba(57, 43, 31, 0.08);
+    }
+
+    .frame-card.primary {
+      padding: 28px;
+      max-width: 29rem;
+    }
+
+    .frame-card.secondary {
+      padding: 18px 20px;
+      min-height: 9.2rem;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .frame-label,
+    .stack-label {
+      margin: 0;
+      font-size: 0.74rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .frame-card h2,
+    .frame-card strong {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .frame-card h2 {
+      font-family: "Bodoni Moda", Georgia, serif;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1;
+      margin-top: 14px;
+      max-width: 12ch;
+    }
+
+    .frame-card p:last-child {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.66;
+    }
+
+    .frame-stack {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .frame-detail {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(24, 23, 22, 0.12);
+      background: rgba(255, 255, 255, 0.42);
+      width: fit-content;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .section {
+      padding: clamp(48px, 8vw, 80px) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 18px 28px;
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .section-head h2,
+    .contact-panel h2 {
+      margin: 0;
+      font-family: "Bodoni Moda", Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      text-wrap: balance;
+      max-width: 12ch;
+    }
+
+    .about-grid,
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .about-card,
+    .practice-card,
+    .project-card,
+    .contact-panel {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(24, 23, 22, 0.12);
+      background: rgba(251, 247, 239, 0.74);
+      box-shadow: 0 20px 44px rgba(49, 37, 28, 0.08);
+    }
+
+    .about-card,
+    .practice-card {
+      padding: 24px;
+    }
+
+    .about-card h3,
+    .practice-card h3,
+    .project-card h3 {
+      margin: 0;
+      font-size: 1.28rem;
+      letter-spacing: -0.03em;
+    }
+
+    .principle-list,
+    .timeline-list,
+    .note-grid {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+      display: grid;
+      gap: 16px;
+    }
+
+    .principle-item,
+    .timeline-item,
+    .note-item {
+      padding-top: 14px;
+      border-top: 1px solid rgba(24, 23, 22, 0.1);
+    }
+
+    .principle-item strong,
+    .timeline-period,
+    .note-item strong {
+      display: block;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 8px;
+    }
+
+    .principle-item p,
+    .timeline-copy,
+    .note-item p {
+      margin: 0;
+    }
+
+    .timeline-title {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .project-card {
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: 14rem auto;
+    }
+
+    .project-visual {
+      position: relative;
+      padding: 22px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      color: var(--paper-strong);
+      border-bottom: 1px solid rgba(24, 23, 22, 0.08);
+    }
+
+    .project-card:nth-child(1) .project-visual {
+      background:
+        linear-gradient(140deg, rgba(22, 21, 20, 0.88), rgba(34, 77, 107, 0.92)),
+        radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.28), transparent 24%);
+    }
+
+    .project-card:nth-child(2) .project-visual {
+      background:
+        linear-gradient(140deg, rgba(158, 79, 45, 0.92), rgba(22, 21, 20, 0.9)),
+        radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.2), transparent 20%);
+    }
+
+    .project-card:nth-child(3) .project-visual {
+      background:
+        linear-gradient(140deg, rgba(34, 77, 107, 0.94), rgba(70, 88, 70, 0.86)),
+        radial-gradient(circle at 22% 84%, rgba(255, 255, 255, 0.18), transparent 22%);
+    }
+
+    .project-visual::before,
+    .project-visual::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .project-visual::before {
+      width: 9rem;
+      height: 9rem;
+      right: -2rem;
+      top: -2rem;
+    }
+
+    .project-visual::after {
+      width: 15rem;
+      height: 15rem;
+      left: -6rem;
+      bottom: -8rem;
+      opacity: 0.5;
+    }
+
+    .project-topline {
+      position: absolute;
+      top: 22px;
+      left: 22px;
+      z-index: 1;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .project-visual strong {
+      position: relative;
+      z-index: 1;
+      max-width: 14ch;
+      font-size: 1.44rem;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .project-body {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .project-year {
+      margin: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .project-summary,
+    .project-impact {
+      margin: 0;
+    }
+
+    .project-impact {
+      padding-top: 14px;
+      border-top: 1px solid rgba(24, 23, 22, 0.1);
+    }
+
+    .tag-row,
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(24, 23, 22, 0.1);
+      background: rgba(255, 255, 255, 0.54);
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .practice-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .practice-card {
+      min-height: 15rem;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+
+    .note-band {
+      margin-top: 18px;
+      padding: 22px 24px 28px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(24, 23, 22, 0.12);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.48), rgba(251, 247, 239, 0.76));
+      box-shadow: 0 16px 38px rgba(56, 41, 29, 0.08);
+    }
+
+    .note-band h3 {
+      margin: 0;
+      font-size: 1.32rem;
+      letter-spacing: -0.03em;
+    }
+
+    .note-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 20px;
+    }
+
+    .note-item {
+      min-height: 10rem;
+      border-top: 1px solid rgba(24, 23, 22, 0.12);
+    }
+
+    .contact-section {
+      padding-bottom: 72px;
+    }
+
+    .contact-panel {
+      padding: clamp(24px, 4vw, 38px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .contact-panel p {
+      margin: 18px 0 0;
+      max-width: 42rem;
+    }
+
+    .contact-links {
+      justify-content: flex-end;
+    }
+
+    .footer {
+      width: var(--shell);
+      margin: 0 auto;
+      padding: 0 0 36px;
+      color: var(--soft);
+      font-size: 0.84rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 680ms ease, transform 680ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .section-head,
+      .about-grid,
+      .projects-grid,
+      .practice-grid,
+      .note-grid,
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .display,
+      .section-head h2,
+      .contact-panel h2 {
+        max-width: none;
+      }
+
+      .hero-frame {
+        min-height: 32rem;
+      }
+
+      .contact-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body::after {
+        inset: 10px;
+      }
+
+      .masthead {
+        padding-top: 10px;
+      }
+
+      .nav-shell {
+        width: min(100vw - 20px, 100%);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        border-radius: 26px;
+      }
+
+      .brand {
+        width: 100%;
+      }
+
+      .brand-name {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 4px;
+      }
+
+      .nav-links a {
+        padding-inline: 6px;
+        font-size: 0.78rem;
+      }
+
+      .hero {
+        padding-top: 36px;
+      }
+
+      .hero-frame {
+        min-height: auto;
+      }
+
+      .frame-stack,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .site-shell,
+      .footer {
+        width: min(100vw - 20px, 100%);
+      }
+
+      .project-card {
+        grid-template-rows: 12rem auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .reveal,
+      .button,
+      .nav-links a {
+        transition: none;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="nav-shell">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div class="brand-copy">
+          <p class="brand-label">Portfolio</p>
+          <p class="brand-name" id="brand-name">Zephyrus Zhou</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#process">Approach</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-shell">
+    <section class="hero" id="top">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Selected Work / Creative Technology Portfolio</p>
+        <h1 class="display" id="hero-name">Zephyrus Zhou</h1>
+        <p class="hero-role" id="hero-role"></p>
+        <p class="lede" id="hero-intro"></p>
+        <div class="hero-actions" id="hero-actions"></div>
+        <ul class="stat-grid" id="stat-grid" aria-label="Key portfolio stats"></ul>
+      </div>
+
+      <div class="hero-frame reveal" aria-label="Portfolio summary">
+        <div class="frame-card primary">
+          <p class="frame-label">Current Focus</p>
+          <h2 id="focus-title"></h2>
+          <p id="focus-copy"></p>
+        </div>
+        <div class="frame-detail" id="frame-detail"></div>
+        <div class="frame-stack" id="focus-stack"></div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-kicker">About</p>
+          <h2>围绕 AI、声音体验与文化叙事，先建立一个清晰的个人作品切面。</h2>
+        </div>
+        <p id="about-copy"></p>
+      </div>
+
+      <div class="about-grid">
+        <article class="about-card reveal">
+          <p class="section-kicker">Design Principles</p>
+          <h3>这个模板默认强调结果、叙事和可维护性。</h3>
+          <ul class="principle-list" id="principles-list"></ul>
+        </article>
+
+        <article class="about-card reveal">
+          <p class="section-kicker">Launch Checklist</p>
+          <h3>从本地文件到 GitHub Pages，大概只要三步。</h3>
+          <ul class="timeline-list" id="timeline-list"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-kicker">Selected Work</p>
+          <h2>把公开仓库整理成更像作品、而不只是代码列表。</h2>
+        </div>
+        <p>
+          这三张项目卡基于公开 GitHub 仓库整理，覆盖 AI 驱动的小程序、实时音频可视化实验、
+          以及运河文化主题的移动应用。后续如果你愿意，我可以继续把它们扩成完整 case study。
+        </p>
+      </div>
+
+      <div class="projects-grid" id="projects-grid"></div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-kicker">Approach</p>
+          <h2>把不同媒介的项目，收束成一条一致的创作方法。</h2>
+        </div>
+        <p>
+          从 GitHub 上能看到的公开作品里，主线已经很清楚:
+          你在用技术处理感知、文化和叙事问题，而不只是做纯功能型实现。
+        </p>
+      </div>
+
+      <div class="practice-grid" id="practice-grid"></div>
+
+      <div class="note-band reveal">
+        <p class="section-kicker">Now</p>
+        <h3>当前在推进什么，可以让网站更像一个活着的工作室。</h3>
+        <ul class="note-grid" id="now-list"></ul>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="contact-panel reveal">
+        <div>
+          <p class="section-kicker">Contact</p>
+          <h2>当前公开入口先放 GitHub，后续可以再补更多联系渠道。</h2>
+          <p id="contact-copy"></p>
+          <p class="contact-note">
+            如果你后续想补邮箱、LinkedIn、微信二维码、博客或双语内容，这个结构可以直接继续扩展。
+          </p>
+        </div>
+        <div class="contact-links" id="contact-links"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Archived the previous experiment at <code>archive/youth-in-refraction.html</code>. <span id="footer-year"></span></p>
+  </footer>
+
+  <script>
+    const portfolioData = {
+      name: "Fay1Yee",
+      role: "Creative developer exploring AI-assisted products, sound visualization, and cultural storytelling.",
+      intro:
+        "我关注 AI、声音体验与文化叙事的交叉地带，喜欢把概念做成可运行的原型、应用和实验。从宠物营养小程序，到运河声景 App，再到实时音频可视化，这里是我当前公开作品的第一版整理。",
+      focusTitle: "AI products, sound interfaces, and cultural narratives.",
+      focusCopy:
+        "公开仓库里已经能看到一条明确的主线: 用代码去做更有感知力的产品体验，把 AI、声音、视觉和文化主题组织成完整作品。",
+      frameDetail: "Public work across mini app, Python experiment, and Flutter app",
+      about:
+        "从公开 GitHub 项目看，我的实践主要集中在三条线上: AI 驱动的产品原型、声音与可视化实验、以及带有文化叙事的移动应用。这个首页先把这些线索组织成一个更适合展示和分享的入口。",
+      contact:
+        "目前先以 GitHub 作为公开入口。等你补充邮箱、LinkedIn 或个人域名后，这里可以再升级成完整的联系区和合作入口。",
+      links: [
+        { label: "View Work", href: "#work", style: "primary" },
+        { label: "GitHub Profile", href: "https://github.com/Fay1Yee", style: "secondary" },
+        { label: "Canal App", href: "https://github.com/Fay1Yee/Canal_App", style: "tertiary" },
+        { label: "PawPlate", href: "https://github.com/Fay1Yee/PawPlate", style: "secondary" }
+      ],
+      stats: [
+        { value: "04", label: "Public repositories on GitHub" },
+        { value: "03", label: "Featured public projects on this page" },
+        { value: "JS / PY / DART", label: "Visible primary stacks across current work" }
+      ],
+      focusStack: [
+        {
+          label: "AI Product",
+          value: "Recommendation, image generation, and end-to-end mini app flows"
+        },
+        {
+          label: "Sound",
+          value: "Live audio analysis, clustering, and typographic visualization"
+        },
+        {
+          label: "Culture",
+          value: "Grand Canal soundscape app with immersive narrative framing"
+        },
+        {
+          label: "Portfolio",
+          value: "A cleaner public layer for sharing projects and future case studies"
+        }
+      ],
+      principles: [
+        {
+          title: "Use technology as medium",
+          copy: "项目不只停在功能实现，而是把 AI、声音、图像和交互组织成更完整的体验。"
+        },
+        {
+          title: "Prototype across formats",
+          copy: "从小程序到桌面实验，再到 Flutter App，公开作品已经覆盖了多种技术形态和表达方式。"
+        },
+        {
+          title: "Keep the work legible",
+          copy: "作品集的任务不是重复仓库目录，而是把项目背后的主题、判断和方向讲明白。"
+        }
+      ],
+      timeline: [
+        {
+          period: "Step 1",
+          title: "Replace inline data",
+          copy: "编辑本文件底部的 portfolioData，替换姓名、简介、项目和外链。"
+        },
+        {
+          period: "Step 2",
+          title: "Create a GitHub repository",
+          copy: "把当前目录推到仓库根目录，保证首页文件仍然叫 index.html。"
+        },
+        {
+          period: "Step 3",
+          title: "Enable GitHub Pages",
+          copy: "在 GitHub 仓库 Settings > Pages 中选择 main branch / root 发布。"
+        }
+      ],
+      projects: [
+        {
+          eyebrow: "Project 01",
+          visualTitle: "AI-driven pet nutrition mini app.",
+          year: "2026",
+          title: "PawPlate",
+          summary:
+            "一个面向宠物主人的个性化食谱推荐小程序，整合了宠物信息驱动的推荐逻辑、AI 图片生成、双语标题和完整购买流程。",
+          impact:
+            "公开 README 展示了从前端小程序到 Node.js 后端的一整套产品结构，重点不只是推荐功能，而是把内容、图像和交易路径打成一个连续体验。",
+          tags: ["JavaScript", "Node.js", "Mini App"],
+          links: [
+            { label: "GitHub Repo", href: "https://github.com/Fay1Yee/PawPlate" },
+            { label: "Profile", href: "https://github.com/Fay1Yee" }
+          ]
+        },
+        {
+          eyebrow: "Project 02",
+          visualTitle: "Real-time sound analysis as typographic flow.",
+          year: "2025",
+          title: "Canal-preview",
+          summary:
+            "一个基于 Python 的桌面音频实验: 从实时音频中发现 acoustic units，再把声音结构转译成沿河道基线流动的文字可视化。",
+          impact:
+            "这个项目把机器学习、声音处理和实验图形语言连接起来，展示了你不只会做产品，也会做偏研究和表达型的技术探索。",
+          tags: ["Python", "Librosa", "Visualization"],
+          links: [
+            { label: "GitHub Repo", href: "https://github.com/Fay1Yee/Canal-preview" },
+            { label: "Profile", href: "https://github.com/Fay1Yee" }
+          ]
+        },
+        {
+          eyebrow: "Project 03",
+          visualTitle: "Grand Canal soundscape app with AI imagery.",
+          year: "2025",
+          title: "Canal_App",
+          summary:
+            "一个融合 AI 水墨视觉、真实环境音频、地图探索和社区互动的移动应用，把京杭大运河的文化主题转成沉浸式数字体验。",
+          impact:
+            "公开文档显示它已经完成地图、音频、社区、个人资料等模块，并明确规划了实地录音、后端连接和 iOS 版本，具备完整产品雏形。",
+          tags: ["Flutter", "Dart", "Cultural App"],
+          links: [
+            { label: "GitHub Repo", href: "https://github.com/Fay1Yee/Canal_App" },
+            { label: "Profile", href: "https://github.com/Fay1Yee" }
+          ]
+        }
+      ],
+      practices: [
+        {
+          title: "Translate abstract themes into products",
+          copy: "无论是宠物营养、声音环境还是文化遗产，公开项目都在尝试把抽象主题转成可体验的数字产品。"
+        },
+        {
+          title: "Move between prototype and system",
+          copy: "作品既有视觉和叙事层面的表达，也有后端、数据、音频处理和多端实现这类系统层结构。"
+        },
+        {
+          title: "Build a recognizable authorial voice",
+          copy: "把这些仓库放到一个作品集里之后，最重要的价值是让别人看出你的兴趣边界和创作方向。"
+        }
+      ],
+      now: [
+        {
+          title: "Add project screenshots",
+          copy: "下一步最值得补的是每个仓库的真实界面截图，让页面从文字作品集升级成视觉作品集。"
+        },
+        {
+          title: "Expand into case studies",
+          copy: "PawPlate、Canal-preview 和 Canal_App 都可以继续拆成独立页面，补充问题定义、设计过程和技术取舍。"
+        },
+        {
+          title: "Add more public identity",
+          copy: "现在公开入口主要是 GitHub。补上邮箱、LinkedIn 和个人域名后，联系区会更完整。"
+        }
+      ]
+    };
+
+    const brandName = document.getElementById("brand-name");
+    const heroName = document.getElementById("hero-name");
+    const heroRole = document.getElementById("hero-role");
+    const heroIntro = document.getElementById("hero-intro");
+    const heroActions = document.getElementById("hero-actions");
+    const statGrid = document.getElementById("stat-grid");
+    const focusTitle = document.getElementById("focus-title");
+    const focusCopy = document.getElementById("focus-copy");
+    const frameDetail = document.getElementById("frame-detail");
+    const focusStack = document.getElementById("focus-stack");
+    const aboutCopy = document.getElementById("about-copy");
+    const principlesList = document.getElementById("principles-list");
+    const timelineList = document.getElementById("timeline-list");
+    const projectsGrid = document.getElementById("projects-grid");
+    const practiceGrid = document.getElementById("practice-grid");
+    const nowList = document.getElementById("now-list");
+    const contactCopy = document.getElementById("contact-copy");
+    const contactLinks = document.getElementById("contact-links");
+    const footerYear = document.getElementById("footer-year");
+
+    const isExternalLink = (href) => /^https?:/i.test(href);
+
+    const renderLink = (link) => {
+      const classes = ["button"];
+      if (link.style === "primary") classes.push("button-primary");
+      if (link.style === "secondary") classes.push("button-secondary");
+      if (link.style === "tertiary") classes.push("button-tertiary");
+      const target = isExternalLink(link.href) ? ' target="_blank" rel="noreferrer"' : "";
+      return `<a class="${classes.join(" ")}" href="${link.href}"${target}>${link.label}</a>`;
+    };
+
+    brandName.textContent = portfolioData.name;
+    heroName.textContent = portfolioData.name;
+    heroRole.textContent = portfolioData.role;
+    heroIntro.textContent = portfolioData.intro;
+    focusTitle.textContent = portfolioData.focusTitle;
+    focusCopy.textContent = portfolioData.focusCopy;
+    frameDetail.textContent = portfolioData.frameDetail;
+    aboutCopy.textContent = portfolioData.about;
+    contactCopy.textContent = portfolioData.contact;
+    document.title = `${portfolioData.name} | Portfolio`;
+    footerYear.textContent = new Date().getFullYear();
+
+    heroActions.innerHTML = portfolioData.links.slice(0, 3).map(renderLink).join("");
+    contactLinks.innerHTML = portfolioData.links.map(renderLink).join("");
+
+    statGrid.innerHTML = portfolioData.stats
+      .map(
+        (item) => `
+          <li class="stat-card">
+            <span class="stat-value">${item.value}</span>
+            <span class="stat-label">${item.label}</span>
+          </li>
+        `
+      )
+      .join("");
+
+    focusStack.innerHTML = portfolioData.focusStack
+      .map(
+        (item) => `
+          <article class="frame-card secondary">
+            <p class="stack-label">${item.label}</p>
+            <strong>${item.value}</strong>
+          </article>
+        `
+      )
+      .join("");
+
+    principlesList.innerHTML = portfolioData.principles
+      .map(
+        (item) => `
+          <li class="principle-item">
+            <strong>${item.title}</strong>
+            <p>${item.copy}</p>
+          </li>
+        `
+      )
+      .join("");
+
+    timelineList.innerHTML = portfolioData.timeline
+      .map(
+        (item) => `
+          <li class="timeline-item">
+            <span class="timeline-period">${item.period}</span>
+            <p class="timeline-title">${item.title}</p>
+            <p class="timeline-copy">${item.copy}</p>
+          </li>
+        `
+      )
+      .join("");
+
+    projectsGrid.innerHTML = portfolioData.projects
+      .map(
+        (item) => `
+          <article class="project-card reveal">
+            <div class="project-visual">
+              <div class="project-topline">${item.eyebrow}</div>
+              <strong>${item.visualTitle}</strong>
+            </div>
+            <div class="project-body">
+              <div class="project-meta">
+                <p class="project-year">${item.year}</p>
+              </div>
+              <h3>${item.title}</h3>
+              <p class="project-summary">${item.summary}</p>
+              <p class="project-impact">${item.impact}</p>
+              <div class="tag-row">
+                ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+              </div>
+              <div class="tag-row">
+                ${item.links.map(renderLink).join("")}
+              </div>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+
+    practiceGrid.innerHTML = portfolioData.practices
+      .map(
+        (item) => `
+          <article class="practice-card reveal">
+            <p class="section-kicker">Practice</p>
+            <h3>${item.title}</h3>
+            <p>${item.copy}</p>
+          </article>
+        `
+      )
+      .join("");
+
+    nowList.innerHTML = portfolioData.now
+      .map(
+        (item) => `
+          <li class="note-item">
+            <strong>${item.title}</strong>
+            <p>${item.copy}</p>
+          </li>
+        `
+      )
+      .join("");
+
+    const revealElements = Array.from(document.querySelectorAll(".reveal"));
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.14
+        }
+      );
+
+      revealElements.forEach((element) => observer.observe(element));
+    } else {
+      revealElements.forEach((element) => element.classList.add("is-visible"));
+    }
+  </script>
+</body>
+</html>

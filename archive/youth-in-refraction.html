@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youth in Refraction</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23d4eeff'/%3E%3Cstop offset='0.5' stop-color='%23f8d4eb'/%3E%3Cstop offset='1' stop-color='%23d8f4e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='24' fill='url(%23g)'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f9f9fa;
+      --panel: rgba(255, 255, 255, 0.54);
+      --panel-strong: rgba(255, 255, 255, 0.82);
+      --panel-border: rgba(42, 52, 67, 0.1);
+      --ink: #11151c;
+      --muted: rgba(17, 21, 28, 0.58);
+      --soft: rgba(17, 21, 28, 0.34);
+      --accent: #8fb6ff;
+      --accent-soft: rgba(143, 182, 255, 0.2);
+      --pearl: #f5d7eb;
+      --mint: #cfeee3;
+      --glass-shadow: 0 24px 80px rgba(67, 85, 112, 0.12);
+      --card-shadow: 0 18px 48px rgba(50, 62, 82, 0.08);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 999px;
+      --shell-max: 1700px;
+      --shell-gutter: max(26px, calc((100vw - var(--shell-max)) / 2 + 28px));
+      --rail-width: min(278px, 20vw);
+      --story-width: clamp(22rem, 25vw, 29rem);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(186, 224, 255, 0.56), transparent 28%),
+        radial-gradient(circle at 74% 22%, rgba(255, 215, 235, 0.45), transparent 26%),
+        radial-gradient(circle at 52% 78%, rgba(208, 245, 228, 0.45), transparent 30%),
+        linear-gradient(180deg, #fafafc 0%, #f5f5f7 100%);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: -18vw;
+      background:
+        radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(255, 255, 255, 0.92), transparent 24%),
+        radial-gradient(circle at calc(var(--glow-x, 50%) + 12%) calc(var(--glow-y, 50%) - 10%), rgba(174, 218, 255, 0.42), transparent 20%),
+        radial-gradient(circle at calc(var(--glow-x, 50%) - 12%) calc(var(--glow-y, 50%) + 12%), rgba(245, 214, 237, 0.34), transparent 22%);
+      filter: blur(56px);
+      opacity: 0.86;
+      transition: transform 600ms ease-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(17, 21, 28, 0.04) 0.8px, transparent 0.8px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.35) 0.8px, transparent 0.8px);
+      background-position: 0 0, 16px 16px;
+      background-size: 22px 22px;
+      opacity: 0.16;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 18px;
+      left: var(--shell-gutter);
+      right: var(--shell-gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.54);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 12px 30px rgba(45, 58, 77, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d4eeff 0%, #f8d4eb 48%, #d8f4e5 100%);
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.48);
+      flex: none;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-kicker {
+      margin: 0;
+      font-size: 0.64rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .brand-title {
+      margin: 2px 0 0;
+      font-size: 0.92rem;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a,
+    .status-pill {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      line-height: 1;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: color 220ms ease, border-color 220ms ease, background 220ms ease, transform 220ms ease;
+    }
+
+    .nav-links a:hover,
+    .status-pill:hover {
+      color: var(--ink);
+      border-color: rgba(143, 182, 255, 0.3);
+      background: rgba(255, 255, 255, 0.52);
+      transform: translateY(-1px);
+    }
+
+    .chrome {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .stage-wrap {
+      position: absolute;
+      top: 118px;
+      right: calc(var(--shell-gutter) + var(--rail-width) + 28px);
+      bottom: 54px;
+      left: calc(var(--shell-gutter) + var(--story-width) + 46px);
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+
+    .stage-meta {
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: grid;
+      gap: 10px;
+      max-width: 420px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .label-stack {
+      display: grid;
+      gap: 6px;
+    }
+
+    .eyebrow {
+      margin: 0;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .stage-title {
+      margin: 0;
+      font-size: clamp(1.9rem, 3.4vw, 3.3rem);
+      letter-spacing: -0.06em;
+      font-weight: 500;
+      line-height: 0.96;
+      text-wrap: balance;
+    }
+
+    .stage-subtitle {
+      margin: 0;
+      max-width: 36ch;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.52;
+    }
+
+    .stage-frame {
+      position: relative;
+      width: min(58vw, 820px);
+      max-width: 100%;
+      aspect-ratio: 0.88;
+      border-radius: 38px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.92), transparent 24%),
+        linear-gradient(160deg, rgba(255, 255, 255, 0.82), rgba(248, 250, 255, 0.42));
+      box-shadow: 0 34px 96px rgba(72, 92, 121, 0.14);
+      pointer-events: auto;
+      isolation: isolate;
+      transition: transform 480ms ease, box-shadow 480ms ease, border-color 320ms ease;
+    }
+
+    .stage-frame::before,
+    .stage-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .stage-frame::before {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.9), transparent 24%, transparent 72%, rgba(255, 255, 255, 0.26)),
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.82), transparent 26%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.14));
+      mix-blend-mode: screen;
+      opacity: 0.8;
+    }
+
+    .stage-frame::after {
+      inset: 18px;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      opacity: 0.7;
+    }
+
+    .stage-frame[data-material="glass"] {
+      border-color: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 28px 90px rgba(93, 119, 145, 0.16);
+    }
+
+    .stage-frame[data-material="ceramic"] {
+      border-color: rgba(255, 248, 241, 0.9);
+      box-shadow: 0 28px 90px rgba(94, 86, 76, 0.12);
+      background: linear-gradient(150deg, rgba(255, 250, 246, 0.9), rgba(241, 239, 236, 0.55));
+    }
+
+    .stage-frame[data-material="acrylic"] {
+      border-color: rgba(236, 247, 255, 0.9);
+      box-shadow: 0 28px 90px rgba(69, 102, 151, 0.16);
+      background: linear-gradient(150deg, rgba(249, 254, 255, 0.88), rgba(235, 245, 255, 0.38));
+    }
+
+    .stage-frame:hover {
+      transform: translateY(-4px) scale(1.006);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stage-caption {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .caption-card,
+    .caption-note {
+      border-radius: 16px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.26);
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .caption-card p,
+    .caption-note p {
+      margin: 0;
+    }
+
+    .caption-card p:first-child,
+    .caption-note p:first-child {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(17, 21, 28, 0.44);
+      margin-bottom: 6px;
+    }
+
+    .caption-card p:last-child,
+    .caption-note p:last-child {
+      font-size: 0.84rem;
+      color: rgba(17, 21, 28, 0.74);
+      line-height: 1.45;
+    }
+
+    .control-rail {
+      position: absolute;
+      top: 116px;
+      right: var(--shell-gutter);
+      bottom: 40px;
+      width: var(--rail-width);
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      overflow-y: auto;
+      padding-right: 4px;
+      pointer-events: auto;
+    }
+
+    .control-rail::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .panel {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 14px 30px rgba(52, 66, 89, 0.07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0 0 6px;
+      font-size: 0.98rem;
+      letter-spacing: -0.03em;
+      font-weight: 550;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.46;
+    }
+
+    .control-stack {
+      display: grid;
+      gap: 15px;
+      margin-top: 16px;
+    }
+
+    .control-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .control-row label {
+      font-size: 0.71rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .control-row output {
+      min-width: 54px;
+      text-align: right;
+      font-size: 0.73rem;
+      color: var(--muted);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      background: transparent;
+      height: 22px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(143, 182, 255, 0.35), rgba(17, 21, 28, 0.16));
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      margin-top: -6px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      background:
+        radial-gradient(circle at 30% 30%, #ffffff, #f2d8ec 42%, #b9d4ff 74%, #89abc8 100%);
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.18), 0 10px 18px rgba(79, 97, 123, 0.22);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover,
+    input[type="range"]::-webkit-slider-thumb:active {
+      transform: scale(1.18);
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.24), 0 10px 20px rgba(79, 97, 123, 0.26);
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(143, 182, 255, 0.35), rgba(17, 21, 28, 0.16));
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      background:
+        radial-gradient(circle at 30% 30%, #ffffff, #f2d8ec 42%, #b9d4ff 74%, #89abc8 100%);
+      box-shadow: 0 10px 18px rgba(79, 97, 123, 0.22);
+    }
+
+    .mood-status {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mood-current {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 21, 28, 0.08);
+      background: rgba(255, 255, 255, 0.42);
+    }
+
+    .mood-current strong {
+      font-size: 1.05rem;
+      font-weight: 520;
+      letter-spacing: -0.02em;
+    }
+
+    .mood-chip {
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(17, 21, 28, 0.1);
+      font-size: 0.77rem;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.58);
+      transition: opacity 240ms ease, transform 240ms ease, border-color 240ms ease, color 240ms ease, background 240ms ease;
+      opacity: 0.68;
+    }
+
+    .mood-chip.active {
+      opacity: 1;
+      color: var(--ink);
+      border-color: rgba(143, 182, 255, 0.42);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(238, 245, 255, 0.88));
+      transform: translateY(-1px);
+    }
+
+    .mood-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .material-grid {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .material-card {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 21, 28, 0.08);
+      background: rgba(255, 255, 255, 0.44);
+      cursor: pointer;
+      transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+      text-align: left;
+      color: inherit;
+      font: inherit;
+    }
+
+    .material-card:hover,
+    .material-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(143, 182, 255, 0.36);
+      background: rgba(255, 255, 255, 0.64);
+      box-shadow: 0 10px 24px rgba(50, 62, 82, 0.08);
+      outline: none;
+    }
+
+    .material-card.active {
+      border-color: rgba(143, 182, 255, 0.52);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 12px 26px rgba(59, 87, 126, 0.12);
+    }
+
+    .swatch {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.66);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
+    }
+
+    .swatch-glass {
+      background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.88), rgba(188, 223, 255, 0.44) 44%, rgba(244, 208, 229, 0.58) 100%);
+      filter: saturate(1.1);
+    }
+
+    .swatch-ceramic {
+      background:
+        linear-gradient(160deg, rgba(255, 250, 245, 0.98), rgba(244, 239, 232, 0.86) 60%, rgba(231, 226, 220, 0.92));
+    }
+
+    .swatch-acrylic {
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(191, 230, 255, 0.62) 48%, rgba(217, 255, 238, 0.76));
+      filter: saturate(1.15) contrast(1.08);
+    }
+
+    .material-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+      letter-spacing: -0.02em;
+    }
+
+    .material-copy span {
+      display: block;
+      font-size: 0.77rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .button {
+      appearance: none;
+      border: 1px solid rgba(17, 21, 28, 0.1);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 11px 16px;
+      min-height: 42px;
+      cursor: pointer;
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease, background 220ms ease, color 220ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(143, 182, 255, 0.38);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 247, 255, 0.92));
+      box-shadow: 0 12px 24px rgba(50, 62, 82, 0.1);
+      outline: none;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(232, 242, 255, 0.92));
+      border-color: rgba(143, 182, 255, 0.28);
+    }
+
+    .button-subtle {
+      color: var(--muted);
+    }
+
+    .action-row .button {
+      flex: 1;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      min-height: 18px;
+      font-size: 0.74rem;
+      color: var(--soft);
+    }
+
+    .story {
+      position: relative;
+      z-index: 3;
+      padding: 142px 0 18vh;
+    }
+
+    .story-block {
+      min-height: 100vh;
+      padding: 10vh 0 8vh var(--shell-gutter);
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+    }
+
+    .story-card {
+      width: var(--story-width);
+      padding: 24px 24px 22px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.36);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      box-shadow: 0 16px 40px rgba(52, 65, 89, 0.07);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .story-card h2 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 3vw, 3.05rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+      font-weight: 520;
+      text-wrap: balance;
+    }
+
+    .story-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.18rem;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      font-weight: 520;
+    }
+
+    .story-card p,
+    .story-card li {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.64;
+    }
+
+    .story-card ul {
+      margin: 18px 0 0;
+      padding-left: 18px;
+    }
+
+    .story-card .meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+      border: 1px solid rgba(17, 21, 28, 0.08);
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .story-card .highlight {
+      color: var(--ink);
+    }
+
+    .gallery-shell {
+      margin-top: 24px;
+      width: min(44rem, calc(100vw - 12vw));
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.48);
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      box-shadow: 0 18px 44px rgba(52, 65, 89, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .gallery-shell h3 {
+      margin: 0 0 8px;
+      font-size: 1.24rem;
+      letter-spacing: -0.04em;
+      font-weight: 530;
+    }
+
+    .gallery-shell p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .gallery-empty {
+      display: grid;
+      place-items: center;
+      min-height: 200px;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 24px;
+      border: 1px dashed rgba(17, 21, 28, 0.18);
+      color: var(--soft);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    .gallery-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .gallery-card {
+      display: grid;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(17, 21, 28, 0.08);
+      box-shadow: 0 14px 34px rgba(50, 62, 82, 0.08);
+    }
+
+    .gallery-thumb {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, rgba(232, 241, 255, 0.82), rgba(244, 223, 236, 0.78), rgba(222, 245, 236, 0.8));
+    }
+
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-copy h4 {
+      margin: 0 0 4px;
+      font-size: 0.96rem;
+      letter-spacing: -0.03em;
+      font-weight: 550;
+    }
+
+    .gallery-copy p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .gallery-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .mini-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(17, 21, 28, 0.04);
+      font-size: 0.73rem;
+      color: var(--muted);
+    }
+
+    .gallery-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .gallery-actions .button {
+      flex: 1;
+      padding: 10px 12px;
+      min-height: 38px;
+      font-size: 0.8rem;
+    }
+
+    .section-anchor {
+      position: relative;
+      top: -150px;
+      scroll-margin-top: 150px;
+      visibility: hidden;
+    }
+
+    .error-banner {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      color: #8a2f2f;
+      background: rgba(255, 235, 235, 0.72);
+      border: 1px solid rgba(196, 93, 93, 0.18);
+      display: none;
+    }
+
+    @media (max-width: 1160px) {
+      :root {
+        --rail-width: min(292px, 28vw);
+        --story-width: clamp(23rem, 31vw, 31rem);
+      }
+
+      .topbar {
+        border-radius: 26px;
+        align-items: flex-start;
+      }
+
+      .stage-wrap {
+        left: calc(var(--shell-gutter) + var(--story-width) + 28px);
+        right: calc(var(--shell-gutter) + var(--rail-width) + 18px);
+      }
+    }
+
+    @media (max-width: 980px) {
+      html {
+        scroll-snap-type: none;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .chrome {
+        position: relative;
+        inset: auto;
+        padding: 12px 14px 0;
+        display: grid;
+        gap: 14px;
+      }
+
+      .stage-wrap,
+      .control-rail {
+        position: relative;
+        inset: auto;
+        width: auto;
+      }
+
+      .stage-wrap {
+        display: grid;
+        gap: 14px;
+      }
+
+      .stage-meta {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        max-width: none;
+        text-align: left;
+      }
+
+      .stage-frame {
+        width: 100%;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      .control-rail {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .story {
+        padding-top: 18px;
+      }
+
+      .story-block {
+        min-height: auto;
+        padding: 0 14px 28px;
+      }
+
+      .story-card,
+      .gallery-shell {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .control-rail {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        left: 10px;
+        right: 10px;
+      }
+
+      .stage-frame {
+        border-radius: 26px;
+      }
+
+      .story-card {
+        padding: 22px 20px;
+      }
+
+      .story-card h2 {
+        font-size: 2.2rem;
+      }
+
+      .gallery-shell {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" id="ambient"></div>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-copy">
+        <p class="brand-kicker">Digital Material Gallery</p>
+        <p class="brand-title">Youth in Refraction / 青年折光实验</p>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#hero">Onboarding</a>
+      <a href="#lab">Color Lab</a>
+      <a href="#materials">CMF Preview</a>
+      <a href="#gallery">Gallery</a>
+      <span class="status-pill" id="saved-count">0 saved</span>
+    </nav>
+  </header>
+
+  <div class="chrome">
+    <div class="stage-wrap">
+      <div class="stage-meta">
+        <div class="label-stack">
+          <p class="eyebrow">Realtime WebGL</p>
+          <h1 class="stage-title">Refraction maps becoming.</h1>
+          <p class="stage-subtitle">
+            A refracted body that slides between prism, haze, and specular light.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage-frame" id="stage-frame" data-material="glass">
+        <canvas id="glcanvas" aria-label="Interactive refraction material preview"></canvas>
+        <div class="stage-caption">
+          <div class="caption-card">
+            <p>Active Mood</p>
+            <p id="stage-mood-text">Fluid / 游移</p>
+          </div>
+          <div class="caption-note">
+            <p>Material</p>
+            <p id="stage-material-text">Frosted Glass</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="control-rail">
+      <section class="panel">
+        <h2>Color Lab</h2>
+        <p>
+          Bend the beam, split the spectrum, roughen the surface.
+        </p>
+        <div class="control-stack">
+          <div class="control-group">
+            <div class="control-row">
+              <label for="light-angle">Light Angle</label>
+              <output id="light-angle-value">61°</output>
+            </div>
+            <input type="range" id="light-angle" min="0" max="1" step="0.001" value="0.34">
+          </div>
+          <div class="control-group">
+            <div class="control-row">
+              <label for="interference">Interference</label>
+              <output id="interference-value">0.56</output>
+            </div>
+            <input type="range" id="interference" min="0" max="1" step="0.001" value="0.56">
+          </div>
+          <div class="control-group">
+            <div class="control-row">
+              <label for="blur">Blur / Haze</label>
+              <output id="blur-value">0.16</output>
+            </div>
+            <input type="range" id="blur" min="0" max="1" step="0.001" value="0.16">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>Mood Mapping</h3>
+        <div class="mood-status">
+          <div class="mood-current">
+            <div>
+              <p class="eyebrow">Current State</p>
+              <strong id="current-mood">Fluid</strong>
+            </div>
+            <div class="mood-chip active" id="current-mood-chip">Fluid</div>
+          </div>
+          <div class="mood-cloud" id="mood-cloud"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>CMF Material Preview</h3>
+        <p>Switch the substrate and compare how the same light lands on each surface.</p>
+        <div class="material-grid" id="material-grid">
+          <button class="material-card active" data-material="glass" type="button">
+            <span class="swatch swatch-glass"></span>
+            <span class="material-copy">
+              <strong>Frosted Glass</strong>
+              <span>Diffuse edge bloom, suspended depth, softened specular glints.</span>
+            </span>
+          </button>
+          <button class="material-card" data-material="ceramic" type="button">
+            <span class="swatch swatch-ceramic"></span>
+            <span class="material-copy">
+              <strong>Ceramic Shell</strong>
+              <span>Matte glow, chalky diffusion, a warmer and more grounded read.</span>
+            </span>
+          </button>
+          <button class="material-card" data-material="acrylic" type="button">
+            <span class="swatch swatch-acrylic"></span>
+            <span class="material-copy">
+              <strong>Acrylic Lens</strong>
+              <span>Sharper sparkle, cleaner refraction, heightened chromatic edges.</span>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>Capture Mood Slice</h3>
+        <p>
+          Save the current frame as a card, then export the set as JSON.
+        </p>
+        <div class="action-row">
+          <button class="button button-primary" id="save-state" type="button">Save State</button>
+          <button class="button button-subtle" id="export-json" type="button">Export JSON</button>
+        </div>
+        <div class="feedback" id="feedback">Canvas snapshot is ready for capture.</div>
+        <div class="error-banner" id="error-banner"></div>
+      </section>
+    </aside>
+  </div>
+
+  <main class="story">
+    <section class="story-block">
+      <span class="section-anchor" id="hero"></span>
+      <div class="story-card">
+        <div class="meta">Node 1 / Onboarding & Hero</div>
+        <h2>Youth behaves like refracted light.</h2>
+        <p>
+          This single-page exhibition turns <span class="highlight">refraction, color drift, and shadow bloom</span>
+          into a metaphor for unstable identity. The central material is not a fixed object. It becomes legible only
+          through angle, distance, and interference, mirroring how young selves are read differently under changing
+          social light.
+        </p>
+        <p>
+          Scroll into the interactive lab, drag the parameters on the right, and let the material slip from lucid to
+          restless. Each state can be captured as a temporary evidence card: an emotional slice rather than a final form.
+        </p>
+        <div class="action-row">
+          <button class="button button-primary" id="scroll-to-lab" type="button">Enter The Lab</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-block">
+      <span class="section-anchor" id="lab"></span>
+      <div class="story-card">
+        <div class="meta">Node 2 / Interactive Color Lab & Mood Mapping</div>
+        <h3>Parameter logic</h3>
+        <p>
+          <span class="highlight">Light Angle</span> rotates the illumination vector and reshapes the specular sweep.
+          <span class="highlight"> Interference</span> amplifies prismatic color separation and drives the emotional
+          threshold map. <span class="highlight">Blur</span> softens contour legibility, making the material feel more
+          fragile, porous, or suspended. All three values are lerped in the render loop so dragging remains smooth and
+          tactile rather than abrupt.
+        </p>
+        <ul>
+          <li>Hover states use pearlescent highlights and restore text opacity from muted to fully legible.</li>
+          <li>Mood tags recompute in real time and elevate the strongest descriptor as the active state.</li>
+          <li>Ambient glow follows the cursor with a delayed drift to keep the room feeling spatial.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="story-block">
+      <span class="section-anchor" id="materials"></span>
+      <div class="story-card">
+        <div class="meta">Node 3 / Material Application Preview</div>
+        <h3>Same light, different surface logic</h3>
+        <p>
+          The shader remains continuous while the CMF layer changes how the refraction reads. Frosted glass blooms and
+          diffuses, ceramic absorbs and grounds, acrylic sharpens and clarifies. The frame styling and fragment shading
+          both shift together, so the preview feels like a material translation rather than a simple skin swap.
+        </p>
+        <p>
+          The result is deliberately not photoreal 3D. It is a digital material study: a controlled visual metaphor that
+          remains lightweight enough to run as a single HTML file in a desktop browser.
+        </p>
+      </div>
+    </section>
+
+    <section class="story-block">
+      <span class="section-anchor" id="gallery"></span>
+      <div>
+        <div class="story-card">
+          <div class="meta">Node 4 / Gallery & Export</div>
+          <h3>Capture transient states</h3>
+          <p>
+            When you press <span class="highlight">Save State</span>, the current WebGL frame is sampled into a thumbnail,
+            paired with the active mood and parameter snapshot, and added to the gallery below. Each card can be restored
+            back into the live lab or exported as a PNG. A full JSON export is available from the control rail.
+          </p>
+        </div>
+
+        <div class="gallery-shell">
+          <h3>Emotion Gallery</h3>
+          <p>Saved states appear here as mood cards with lightweight metadata and re-apply actions.</p>
+          <div class="gallery-empty" id="gallery-empty">No shifted states captured yet.</div>
+          <div class="gallery-grid" id="gallery-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("glcanvas");
+      const errorBanner = document.getElementById("error-banner");
+      const gl = canvas.getContext("webgl", {
+        alpha: false,
+        antialias: true,
+        preserveDrawingBuffer: true
+      });
+
+      const targetParams = {
+        lightAngle: 0.34,
+        interference: 0.56,
+        blur: 0.16
+      };
+
+      const currentParams = { ...targetParams };
+      const mouse = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 };
+      const targetMouse = { ...mouse };
+      const stateStore = [];
+      let activeMood = "Fluid";
+      let activeMaterial = "glass";
+      let lastFrameTime = 0;
+      let lastMoodSignature = "";
+
+      const materialMeta = {
+        glass: { index: 0, label: "Frosted Glass" },
+        ceramic: { index: 1, label: "Ceramic Shell" },
+        acrylic: { index: 2, label: "Acrylic Lens" }
+      };
+
+      const titleFragments = {
+        Fluid: "Unfinished Glow",
+        Fragile: "Thin Surface",
+        Suspended: "Quiet Drift",
+        Lucid: "Clear Interval",
+        Restless: "Shifting Edge",
+        Tender: "Soft Signal",
+        Electric: "Prism Current",
+        Porous: "Open Grain"
+      };
+
+      const sliderMap = [
+        { id: "light-angle", key: "lightAngle", format: value => `${Math.round(value * 180)}°` },
+        { id: "interference", key: "interference", format: value => value.toFixed(2) },
+        { id: "blur", key: "blur", format: value => value.toFixed(2) }
+      ];
+
+      const outputMap = {
+        lightAngle: document.getElementById("light-angle-value"),
+        interference: document.getElementById("interference-value"),
+        blur: document.getElementById("blur-value")
+      };
+
+      const currentMoodEl = document.getElementById("current-mood");
+      const currentMoodChipEl = document.getElementById("current-mood-chip");
+      const moodCloudEl = document.getElementById("mood-cloud");
+      const stageMoodTextEl = document.getElementById("stage-mood-text");
+      const stageMaterialTextEl = document.getElementById("stage-material-text");
+      const stageFrameEl = document.getElementById("stage-frame");
+      const feedbackEl = document.getElementById("feedback");
+      const savedCountEl = document.getElementById("saved-count");
+      const galleryEmptyEl = document.getElementById("gallery-empty");
+      const galleryGridEl = document.getElementById("gallery-grid");
+      const materialButtons = Array.from(document.querySelectorAll(".material-card"));
+
+      sliderMap.forEach(({ id, key, format }) => {
+        const input = document.getElementById(id);
+        input.addEventListener("input", event => {
+          targetParams[key] = parseFloat(event.target.value);
+          outputMap[key].textContent = format(targetParams[key]);
+        });
+        outputMap[key].textContent = format(targetParams[key]);
+      });
+
+      document.getElementById("scroll-to-lab").addEventListener("click", () => {
+        document.getElementById("lab").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      materialButtons.forEach(button => {
+        button.addEventListener("click", () => setMaterial(button.dataset.material));
+      });
+
+      document.getElementById("save-state").addEventListener("click", saveState);
+      document.getElementById("export-json").addEventListener("click", exportStates);
+
+      window.addEventListener("mousemove", event => {
+        targetMouse.x = event.clientX;
+        targetMouse.y = event.clientY;
+        document.documentElement.style.setProperty("--glow-x", `${(event.clientX / window.innerWidth) * 100}%`);
+        document.documentElement.style.setProperty("--glow-y", `${(event.clientY / window.innerHeight) * 100}%`);
+      }, { passive: true });
+
+      window.addEventListener("resize", resizeCanvas);
+
+      updateMoodUI(currentParams, true);
+      setMaterial(activeMaterial);
+
+      if (!gl) {
+        showError("WebGL is not available in this browser. Open the file in a modern desktop browser to run the exhibition.");
+        return;
+      }
+
+      const vertexSource = `
+        attribute vec2 a_position;
+        varying vec2 v_uv;
+        void main() {
+          v_uv = a_position * 0.5 + 0.5;
+          gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+      `;
+
+      const fragmentSource = `
+        precision highp float;
+
+        varying vec2 v_uv;
+
+        uniform vec2 u_resolution;
+        uniform vec2 u_mouse;
+        uniform float u_time;
+        uniform float u_lightAngle;
+        uniform float u_interference;
+        uniform float u_blur;
+        uniform float u_material;
+
+        const float PI = 3.14159265359;
+
+        mat2 rot(float a) {
+          float s = sin(a);
+          float c = cos(a);
+          return mat2(c, -s, s, c);
+        }
+
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+        }
+
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          vec2 u = f * f * (3.0 - 2.0 * f);
+          return mix(
+            mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+            mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+            u.y
+          );
+        }
+
+        float fbm(vec2 p) {
+          float value = 0.0;
+          float amplitude = 0.5;
+          for (int i = 0; i < 5; i++) {
+            value += amplitude * noise(p);
+            p = p * 2.03 + vec2(11.7, 7.9);
+            amplitude *= 0.5;
+          }
+          return value;
+        }
+
+        vec3 spectrum(float t) {
+          vec3 a = vec3(0.82, 0.88, 0.96);
+          vec3 b = vec3(0.18, 0.15, 0.12);
+          vec3 c = vec3(1.0, 1.0, 1.0);
+          vec3 d = vec3(0.0, 0.15, 0.32);
+          return a + b * cos(6.28318 * (c * t + d));
+        }
+
+        vec3 roomField(vec2 p, vec2 lightDir, float time) {
+          vec2 q = p * rot(0.12);
+          float veil = fbm(q * 2.2 + vec2(time * 0.03, -time * 0.02));
+          float beam = exp(-abs(dot(q - lightDir * 0.12, vec2(-lightDir.y, lightDir.x))) * 8.5);
+          float bloom = exp(-length(q - lightDir * 0.46) * 2.9);
+          float radial = exp(-length(q + lightDir * 0.12) * 1.8);
+          float causticA = pow(max(0.0, sin(dot(q, lightDir) * 13.0 + veil * 8.0 - time * 0.34)), 6.0);
+          float causticB = pow(max(0.0, sin(dot(q, vec2(-lightDir.y, lightDir.x)) * 17.0 - veil * 6.0 + time * 0.22)), 5.0);
+          float bands = 0.5 + 0.5 * sin(q.x * 7.0 - q.y * 1.5 + time * 0.08);
+
+          vec3 base = vec3(0.892, 0.91, 0.944);
+          base += vec3(0.04, 0.07, 0.11) * beam * 0.44;
+          base += vec3(0.05, 0.065, 0.085) * bloom * 0.32;
+          base += vec3(0.022, 0.032, 0.045) * radial * 0.28;
+          base += vec3(0.018, 0.022, 0.028) * (bands - 0.5) * 0.9;
+          base += vec3(causticA * 0.05 + causticB * 0.03) * vec3(0.7, 0.88, 1.0) * 0.26;
+          base += vec3(veil - 0.5) * 0.036;
+          base += vec3(0.03, 0.044, 0.062) * smoothstep(1.18, 0.08, length(q)) * 0.18;
+          return clamp(base, 0.0, 1.0);
+        }
+
+        float lensDistance(vec2 p, float wobble) {
+          vec2 q = p * rot(0.24);
+          float a = atan(q.y, q.x);
+          float edge = 0.57
+            + 0.05 * sin(a * 3.0 + wobble * 3.4)
+            + 0.025 * sin(a * 6.0 - wobble * 4.2);
+          return length(q * vec2(0.9, 1.12)) - edge;
+        }
+
+        float heightField(vec2 p, vec2 lightDir, float time) {
+          vec2 q = p * rot(0.24);
+          float base = max(0.0, 0.62 - length(q * vec2(0.92, 1.16)));
+          float ripples = fbm(q * 3.4 + lightDir * 0.7 + vec2(time * 0.08, -time * 0.06));
+          float striations = sin(dot(q, lightDir) * 12.0 + ripples * 8.0 - time * 0.5) * 0.5 + 0.5;
+          return base * (0.65 + ripples * 0.35) + striations * 0.08;
+        }
+
+        float materialRoughness(float baseRough, float material) {
+          if (material < 0.5) {
+            return clamp(baseRough * 0.78 + 0.08, 0.02, 0.92);
+          } else if (material < 1.5) {
+            return clamp(baseRough * 0.62 + 0.32, 0.18, 0.95);
+          }
+          return clamp(baseRough * 0.38 + 0.03, 0.01, 0.68);
+        }
+
+        float materialDispersion(float interference, float material) {
+          float dispersion = mix(0.003, 0.042, pow(interference, 1.25));
+          if (material < 0.5) {
+            return dispersion;
+          } else if (material < 1.5) {
+            return dispersion * 0.34;
+          }
+          return dispersion * 1.48;
+        }
+
+        float materialReflectance(float material) {
+          if (material < 0.5) {
+            return 1.0;
+          } else if (material < 1.5) {
+            return 0.45;
+          }
+          return 1.28;
+        }
+
+        float materialMilk(float material) {
+          if (material < 0.5) {
+            return 0.1;
+          } else if (material < 1.5) {
+            return 0.24;
+          }
+          return 0.025;
+        }
+
+        float materialPrism(float material) {
+          if (material < 0.5) {
+            return 1.0;
+          } else if (material < 1.5) {
+            return 0.38;
+          }
+          return 1.42;
+        }
+
+        vec3 materialTint(float material) {
+          if (material < 0.5) {
+            return vec3(0.99, 1.0, 1.02);
+          } else if (material < 1.5) {
+            return vec3(1.0, 0.97, 0.94);
+          }
+          return vec3(0.96, 1.0, 1.03);
+        }
+
+        void main() {
+          vec2 p = v_uv * 2.0 - 1.0;
+          float aspect = u_resolution.x / u_resolution.y;
+          p.x *= aspect;
+
+          vec2 mouse = u_mouse / u_resolution * 2.0 - 1.0;
+          mouse.x *= aspect;
+
+          float angle = mix(0.08, PI - 0.08, u_lightAngle);
+          vec2 lightDir = normalize(vec2(cos(angle), sin(angle)));
+
+          float wobble = fbm(p * 2.0 + mouse * 0.4 + vec2(u_time * 0.03, -u_time * 0.02));
+          float dist = lensDistance(p + mouse * 0.02, wobble);
+          float mask = smoothstep(0.08, -0.05, dist);
+          float rim = smoothstep(0.05, 0.0, abs(dist)) * mask;
+
+          float baseRough = smoothstep(0.02, 0.95, u_blur);
+          float roughness = materialRoughness(baseRough, u_material);
+          float dispersion = materialDispersion(u_interference, u_material);
+          float reflectance = materialReflectance(u_material);
+          float milk = materialMilk(u_material);
+          float prismStrength = materialPrism(u_material);
+          vec3 tint = materialTint(u_material);
+
+          vec2 eps = vec2(0.008, 0.0);
+          float localHeight = heightField(p, lightDir, u_time);
+          float hx = heightField(p + eps.xy, lightDir, u_time) - heightField(p - eps.xy, lightDir, u_time);
+          float hy = heightField(p + eps.yx, lightDir, u_time) - heightField(p - eps.yx, lightDir, u_time);
+          vec2 normal = vec2(hx, hy) * (0.84 + u_interference * 1.85) + mouse * 0.16;
+
+          vec2 refractBase = normal * mix(0.035, 0.165, 1.0 - roughness);
+          refractBase += lightDir * mix(0.014, 0.082, u_interference);
+          refractBase += vec2(-lightDir.y, lightDir.x) * sin(localHeight * 12.0 - u_time * 0.35) * 0.018;
+
+          vec3 background = roomField(p, lightDir, u_time);
+          vec3 refracted;
+          refracted.r = roomField(p + refractBase + normal * dispersion * 1.7 + lightDir * dispersion * 0.6, lightDir, u_time).r;
+          refracted.g = roomField(p + refractBase, lightDir, u_time).g;
+          refracted.b = roomField(p + refractBase - normal * dispersion * 1.7 - lightDir * dispersion * 0.6, lightDir, u_time).b;
+
+          vec3 diffuse = roomField(p + normal * mix(0.012, 0.065, roughness), lightDir, u_time);
+          vec3 body = mix(refracted, diffuse, roughness * (0.48 + milk * 0.18));
+
+          float band = sin(dot(p + normal * 0.15, vec2(-lightDir.y, lightDir.x)) * 22.0 + localHeight * 10.0 - u_time * 0.48);
+          vec3 prism = spectrum(band * 0.18 + localHeight * 0.12 + u_interference * 0.22);
+
+          float sweepCoord = dot(p + normal * 0.16 - lightDir * 0.08, vec2(-lightDir.y, lightDir.x));
+          float sweepLine = exp(-abs(sweepCoord) * mix(36.0, 12.0, roughness));
+          float sweepWindow = exp(-abs(dot(p - lightDir * 0.06, lightDir)) * 5.2);
+          float highlight = sweepLine * sweepWindow;
+          float sparkle = exp(-length(p - lightDir * 0.12 - normal * 0.3) * mix(22.0, 10.0, roughness));
+          float caustic = pow(max(0.0, sin(dot(p + refractBase, lightDir) * 18.0 + localHeight * 16.0 - u_time * 0.82)), 5.0);
+          float fresnel = pow(clamp(length(normal) * 1.45 + rim * 0.75, 0.0, 1.0), 2.15);
+
+          float core = smoothstep(0.5, -0.16, dist);
+          body = mix(body, prism, rim * (0.24 + u_interference * 0.42) * prismStrength + caustic * (0.12 + u_interference * 0.24) * prismStrength);
+          body += prism * core * (0.03 + u_interference * 0.1) * prismStrength;
+          body += mix(vec3(1.0), prism, u_interference * 0.76) * (highlight * 0.22 + sparkle * 0.16) * reflectance * (1.0 - roughness * 0.24);
+          body *= vec3(0.93, 0.95, 0.99);
+          body -= vec3(0.04, 0.05, 0.07) * core * (0.12 + roughness * 0.14);
+          body = mix(body, tint, 0.06 + milk * 0.16);
+          body = mix(body, vec3(0.988, 0.992, 0.998), roughness * milk * 0.36);
+          body += vec3(1.0) * fresnel * 0.08 * reflectance;
+          body -= vec3(0.028, 0.036, 0.05) * (1.0 - core) * 0.16;
+
+          vec3 color = mix(background, body, mask);
+          color += rim * prism * (0.18 + dispersion * 6.4);
+          color -= smoothstep(0.02, 0.16, dist) * vec3(0.02, 0.026, 0.03) * 0.08;
+
+          gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
+        }
+      `;
+
+      const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexSource);
+      const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
+      const program = createProgram(gl, vertexShader, fragmentShader);
+
+      if (!program) {
+        return;
+      }
+
+      const positionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1, -1,
+         1, -1,
+        -1,  1,
+         1,  1
+      ]), gl.STATIC_DRAW);
+
+      const positionLocation = gl.getAttribLocation(program, "a_position");
+      const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+      const mouseLocation = gl.getUniformLocation(program, "u_mouse");
+      const timeLocation = gl.getUniformLocation(program, "u_time");
+      const lightAngleLocation = gl.getUniformLocation(program, "u_lightAngle");
+      const interferenceLocation = gl.getUniformLocation(program, "u_interference");
+      const blurLocation = gl.getUniformLocation(program, "u_blur");
+      const materialLocation = gl.getUniformLocation(program, "u_material");
+
+      gl.useProgram(program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+      resizeCanvas();
+      requestAnimationFrame(render);
+
+      function createShader(context, type, source) {
+        const shader = context.createShader(type);
+        context.shaderSource(shader, source);
+        context.compileShader(shader);
+
+        if (!context.getShaderParameter(shader, context.COMPILE_STATUS)) {
+          const info = context.getShaderInfoLog(shader) || "Unknown shader error";
+          showError(`Shader compilation failed: ${info}`);
+          context.deleteShader(shader);
+          return null;
+        }
+
+        return shader;
+      }
+
+      function createProgram(context, vertexShaderRef, fragmentShaderRef) {
+        if (!vertexShaderRef || !fragmentShaderRef) {
+          return null;
+        }
+
+        const shaderProgram = context.createProgram();
+        context.attachShader(shaderProgram, vertexShaderRef);
+        context.attachShader(shaderProgram, fragmentShaderRef);
+        context.linkProgram(shaderProgram);
+
+        if (!context.getProgramParameter(shaderProgram, context.LINK_STATUS)) {
+          const info = context.getProgramInfoLog(shaderProgram) || "Unknown program link error";
+          showError(`Shader program linking failed: ${info}`);
+          context.deleteProgram(shaderProgram);
+          return null;
+        }
+
+        return shaderProgram;
+      }
+
+      function showError(message) {
+        errorBanner.textContent = message;
+        errorBanner.style.display = "block";
+      }
+
+      function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.max(1, Math.round(rect.width * pixelRatio));
+        const height = Math.max(1, Math.round(rect.height * pixelRatio));
+
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+        }
+      }
+
+      function render(now) {
+        resizeCanvas();
+        const time = now * 0.001;
+        const delta = Math.min((now - lastFrameTime) / 16.6667 || 1, 2);
+        lastFrameTime = now;
+
+        mouse.x += (targetMouse.x - mouse.x) * 0.1 * delta;
+        mouse.y += (targetMouse.y - mouse.y) * 0.1 * delta;
+
+        currentParams.lightAngle += (targetParams.lightAngle - currentParams.lightAngle) * 0.11 * delta;
+        currentParams.interference += (targetParams.interference - currentParams.interference) * 0.11 * delta;
+        currentParams.blur += (targetParams.blur - currentParams.blur) * 0.11 * delta;
+
+        updateMoodUI(currentParams);
+
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.clearColor(0.97, 0.972, 0.978, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+        gl.uniform2f(mouseLocation, mouse.x * (canvas.width / window.innerWidth), (window.innerHeight - mouse.y) * (canvas.height / window.innerHeight));
+        gl.uniform1f(timeLocation, time);
+        gl.uniform1f(lightAngleLocation, currentParams.lightAngle);
+        gl.uniform1f(interferenceLocation, currentParams.interference);
+        gl.uniform1f(blurLocation, currentParams.blur);
+        gl.uniform1f(materialLocation, materialMeta[activeMaterial].index);
+
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      }
+
+      function getMoodScores(params) {
+        const angleCentered = 1.0 - Math.abs(params.lightAngle - 0.5) * 2.0;
+        const edgeAngle = Math.abs(params.lightAngle - 0.5) * 2.0;
+
+        return {
+          Fluid: 0.42 + (1.0 - params.blur) * 0.18 + (1.0 - edgeAngle) * 0.2 + params.interference * 0.14,
+          Fragile: 0.2 + params.blur * 0.46 + (1.0 - params.interference) * 0.14,
+          Suspended: 0.24 + params.blur * 0.32 + (1.0 - edgeAngle) * 0.24,
+          Lucid: 0.16 + (1.0 - params.blur) * 0.46 + (1.0 - params.interference) * 0.18,
+          Restless: 0.1 + params.interference * 0.52 + edgeAngle * 0.22 + (1.0 - params.blur) * 0.08,
+          Tender: 0.18 + params.blur * 0.18 + angleCentered * 0.28,
+          Electric: 0.12 + params.interference * 0.42 + (1.0 - params.blur) * 0.14,
+          Porous: 0.18 + params.blur * 0.38 + params.interference * 0.12
+        };
+      }
+
+      function updateMoodUI(params, force = false) {
+        const scores = getMoodScores(params);
+        const ranking = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+        const nextMood = ranking[0][0];
+        const signature = ranking
+          .slice(0, 4)
+          .map(([label, value]) => `${label}:${value.toFixed(2)}`)
+          .join("|");
+
+        activeMood = nextMood;
+
+        if (!force && signature === lastMoodSignature) {
+          return;
+        }
+
+        currentMoodEl.textContent = nextMood;
+        currentMoodChipEl.textContent = nextMood;
+        stageMoodTextEl.textContent = `${nextMood} / ${translateMood(nextMood)}`;
+
+        renderMoodCloud(scores);
+        lastMoodSignature = signature;
+      }
+
+      function renderMoodCloud(scores) {
+        const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+        const maxScore = sorted[0][1];
+
+        moodCloudEl.innerHTML = "";
+        sorted.forEach(([label, value], index) => {
+          const chip = document.createElement("span");
+          const normalized = Math.max(0.4, Math.min(1, value / maxScore));
+          chip.className = `mood-chip${index === 0 ? " active" : ""}`;
+          chip.textContent = label;
+          chip.style.opacity = String(normalized);
+          chip.style.transform = `translateY(${index === 0 ? -1 : 0}px) scale(${0.92 + normalized * 0.1})`;
+          moodCloudEl.appendChild(chip);
+        });
+      }
+
+      function setMaterial(material) {
+        activeMaterial = material;
+        stageFrameEl.dataset.material = material;
+        stageMaterialTextEl.textContent = materialMeta[material].label;
+        materialButtons.forEach(button => {
+          button.classList.toggle("active", button.dataset.material === material);
+        });
+      }
+
+      function saveState() {
+        try {
+          const savedParams = {
+            lightAngle: roundTo(currentParams.lightAngle),
+            interference: roundTo(currentParams.interference),
+            blur: roundTo(currentParams.blur)
+          };
+          const card = {
+            id: `state_${String(stateStore.length + 1).padStart(2, "0")}`,
+            imageThumbnail: canvas.toDataURL("image/png"),
+            title: titleFragments[activeMood] || "Mood Slice",
+            activeMood,
+            material: activeMaterial,
+            savedParams
+          };
+          stateStore.unshift(card);
+          renderGallery();
+          feedbackEl.textContent = `${card.title} saved with ${activeMood.toLowerCase()} mood mapping.`;
+        } catch (error) {
+          showError(`Unable to save the current frame: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+
+      function renderGallery() {
+        savedCountEl.textContent = `${stateStore.length} saved`;
+        galleryGridEl.innerHTML = "";
+
+        if (!stateStore.length) {
+          galleryEmptyEl.style.display = "grid";
+          galleryGridEl.style.display = "none";
+          return;
+        }
+
+        galleryEmptyEl.style.display = "none";
+        galleryGridEl.style.display = "grid";
+
+        stateStore.forEach(card => {
+          const article = document.createElement("article");
+          article.className = "gallery-card";
+          article.innerHTML = `
+            <div class="gallery-thumb">
+              <img src="${card.imageThumbnail}" alt="${card.title}">
+            </div>
+            <div class="gallery-copy">
+              <h4>${card.title}</h4>
+              <p>${card.activeMood} / ${materialMeta[card.material].label}</p>
+            </div>
+            <div class="gallery-meta">
+              <span class="mini-chip">Light ${Math.round(card.savedParams.lightAngle * 180)}°</span>
+              <span class="mini-chip">Interf. ${card.savedParams.interference.toFixed(2)}</span>
+              <span class="mini-chip">Blur ${card.savedParams.blur.toFixed(2)}</span>
+            </div>
+            <div class="gallery-actions">
+              <button class="button button-subtle" type="button" data-action="apply">Apply</button>
+              <button class="button button-subtle" type="button" data-action="png">PNG</button>
+            </div>
+          `;
+
+          article.querySelector('[data-action="apply"]').addEventListener("click", () => applyState(card));
+          article.querySelector('[data-action="png"]').addEventListener("click", () => downloadDataUrl(card.imageThumbnail, `${card.id}-${slugify(card.title)}.png`));
+          galleryGridEl.appendChild(article);
+        });
+      }
+
+      function applyState(card) {
+        targetParams.lightAngle = card.savedParams.lightAngle;
+        targetParams.interference = card.savedParams.interference;
+        targetParams.blur = card.savedParams.blur;
+        activeMaterial = card.material;
+
+        sliderMap.forEach(({ id, key, format }) => {
+          const input = document.getElementById(id);
+          input.value = String(targetParams[key]);
+          outputMap[key].textContent = format(targetParams[key]);
+        });
+
+        setMaterial(card.material);
+        feedbackEl.textContent = `${card.title} restored to the live lab.`;
+        document.getElementById("lab").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function exportStates() {
+        if (!stateStore.length) {
+          feedbackEl.textContent = "Capture at least one state before exporting JSON.";
+          return;
+        }
+
+        const payload = JSON.stringify(stateStore, null, 2);
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "youth-in-refraction-gallery.json";
+        anchor.click();
+        URL.revokeObjectURL(url);
+        feedbackEl.textContent = `${stateStore.length} saved states exported as JSON.`;
+      }
+
+      function downloadDataUrl(dataUrl, filename) {
+        const anchor = document.createElement("a");
+        anchor.href = dataUrl;
+        anchor.download = filename;
+        anchor.click();
+      }
+
+      function roundTo(value) {
+        return Math.round(value * 1000) / 1000;
+      }
+
+      function slugify(value) {
+        return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      }
+
+      function translateMood(label) {
+        const map = {
+          Fluid: "游移",
+          Fragile: "脆弱",
+          Suspended: "悬置",
+          Lucid: "澄明",
+          Restless: "躁动",
+          Tender: "柔软",
+          Electric: "带电",
+          Porous: "多孔"
+        };
+        return map[label] || label;
+      }
+    })();
+  </script>
+</body>
+</html>
